@@ -1,0 +1,14 @@
+package com.example.demo.auth.user;
+
+import com.example.demo.auth.user.model.User;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface UserRepository extends CrudRepository<User, Long> {
+
+    Optional<User> findByUsername(String username);
+
+}
