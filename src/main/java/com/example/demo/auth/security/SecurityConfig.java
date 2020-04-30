@@ -50,10 +50,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/register").permitAll();
-//                .and()
-//                .addFilter(new JwtSignInFilter(authenticationManager(), secretKey))
-//                .addFilterAfter(new JwtTokenVerifier(secretKey),JwtSignInFilter.class);
+                .antMatchers("/register").permitAll()
+                .and()
+                .addFilter(new JwtSignInFilter(authenticationManager(), secretKey))
+                .addFilterAfter(new JwtTokenVerifier(secretKey),JwtSignInFilter.class);
 
                 /*
                        filtry zakomentowane bo nie chciał mi przepuścić requestu na register

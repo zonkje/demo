@@ -58,12 +58,14 @@ public class RegisterController {
         newUser.setAccountNonLocked(true);
         newUser.setCredentialsNonExpired(true);
         newUser.setEnabled(true);
+
+        //var userEntity = mapper.map(userDto);
         userRepository.save(newUser);
 
         // - do bazy danych chce zapisac Usera, nie UserDto (chce miec (powinienem?) metadane odnosnie konta, czy zablkowane itd)
         // - co zatem powinienem zwrócić?
 
-//        return null;
+        //return null;
     }
 
 }

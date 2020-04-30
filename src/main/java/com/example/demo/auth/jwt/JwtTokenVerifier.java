@@ -1,6 +1,5 @@
 package com.example.demo.auth.jwt;
 
-import com.example.demo.auth.user.model.User;
 import com.google.common.net.HttpHeaders;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -38,8 +37,9 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         String authHeader = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        if(Strings.isNotEmpty(authHeader) || !authHeader.startsWith("Bearer ") ){
+        if(!Strings.isNotBlank(authHeader) || !"Bearer ".startsWith(authHeader)) {
             filterChain.doFilter(httpServletRequest, httpServletResponse);
+            return;
         }
 
         String token = authHeader.replace("Bearer ", "");

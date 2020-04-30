@@ -2,6 +2,7 @@ package com.example.demo.auth.user.model;
 
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -47,11 +48,10 @@ public class User implements UserDetails {
     private boolean isEnabled;
 
 
-    @ElementCollection(targetClass = UserRole.class)
-    @Enumerated(EnumType.STRING)
+    @ElementCollection(targetClass = SimpleGrantedAuthority.class)
     @Getter(AccessLevel.NONE)
     @Column(name = "grantedAuthorities")
-    private Collection<? extends GrantedAuthority> grantedAuthorities;
+    private Collection<SimpleGrantedAuthority> grantedAuthorities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
