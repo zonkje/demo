@@ -29,29 +29,18 @@ public class RegisterController {
     }
 
     /*
-    * This method shouldn't required any authorization, so @PreAuthorize("permitAll()") ????
-    * */
-
-
+    {
+	  "username": "szyemkmeow",
+	  "password": "passwordpassword",
+	  "firstName": "Szymek",
+	  "secondName": "Er",
+	  "email": "test@gmail.com"
+    }
+    */
     @PostMapping(consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public void signUp(@RequestBody @Valid UserDto userDto){
-        //tutaj jakas obsluga bledow
+    public void signUp(@RequestBody @Valid UserDto userDto) {
 
-
-        // jest gdzies problem z castowaniem
-        // przy próbie wysłania
-        /*
-        {
-	        "username": "szyemkmeow",
-	        "password": "passwordpassword",
-	        "firstName": "Szymek",
-	        "secondName": "Er",
-	        "email": "test@gmail.com"
-        }
-        * */
-        // na ten endpoint
-        // class org.springframework.security.core.authority.SimpleGrantedAuthority cannot be cast to class java.lang.Enum
         User newUser = new User();
         newUser.setUsername(userDto.getUsername());
         newUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
@@ -66,11 +55,6 @@ public class RegisterController {
 
         //var userEntity = mapper.map(userDto);
         userRepository.save(newUser);
-
-        // - do bazy danych chce zapisac Usera, nie UserDto (chce miec (powinienem?) metadane odnosnie konta, czy zablkowane itd)
-        // - co zatem powinienem zwrócić?
-
-        //return null;
     }
 
 }
