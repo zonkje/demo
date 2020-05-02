@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,15 +20,18 @@ import javax.validation.Valid;
 public class RegisterController {
 
     private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public RegisterController(UserRepository userRepository) {
+    public RegisterController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /*
     * This method shouldn't required any authorization, so @PreAuthorize("permitAll()") ????
     * */
+
 
     @PostMapping(consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
@@ -50,10 +54,11 @@ public class RegisterController {
         // class org.springframework.security.core.authority.SimpleGrantedAuthority cannot be cast to class java.lang.Enum
         User newUser = new User();
         newUser.setUsername(userDto.getUsername());
-        newUser.setPassword(userDto.getPassword());
+        newUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
         newUser.setFirstName(userDto.getFirstName());
         newUser.setSecondName(userDto.getSecondName());
-        newUser.setGrantedAuthorities(UserRole.USER.getGrantedAuthorities());
+        newUser.setEmail(userDto.getEmail());
+        newUser.setRole(UserRole.USER);
         newUser.setAccountNonExpired(true);
         newUser.setAccountNonLocked(true);
         newUser.setCredentialsNonExpired(true);

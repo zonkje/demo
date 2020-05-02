@@ -35,6 +35,10 @@ public class User implements UserDetails {
     @Column(name = "email")
     private String email;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private UserRole role;
+
     @Column(name = "isAccountNonExpired")
     private boolean isAccountNonExpired;
 
@@ -48,14 +52,9 @@ public class User implements UserDetails {
     private boolean isEnabled;
 
 
-    @ElementCollection(targetClass = SimpleGrantedAuthority.class)
-    @Getter(AccessLevel.NONE)
-    @Column(name = "grantedAuthorities")
-    private Collection<SimpleGrantedAuthority> grantedAuthorities;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return grantedAuthorities;
+        return getRole().getGrantedAuthorities();
     }
 
     @Override
