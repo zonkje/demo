@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostController {
 
     // for test purposes
-    @PreAuthorize("hasAnyRole('ROLE_USER')")
+//    @PreAuthorize("hasAnyRole('USER')")
     @GetMapping
     public String getPost(){ //for test purposes
         return "test";

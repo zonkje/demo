@@ -51,14 +51,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/register").permitAll()
+                .antMatchers("/post").hasAnyRole("USER")
                 .and()
                 .addFilter(new JwtSignInFilter(authenticationManager(), secretKey))
                 .addFilterAfter(new JwtTokenVerifier(secretKey),JwtSignInFilter.class);
-
-                /*
-                       filtry zakomentowane bo nie chciał mi przepuścić requestu na register
-                       (który jest bez uwierzytelniania) - odsyłał do 40 linii JwtTokenVerifier'a
-                */
 
     }
 
