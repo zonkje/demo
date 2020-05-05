@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostController {
 
     // for test purposes
-//    @PreAuthorize("hasAnyRole('USER')")
     @GetMapping
+    @PreAuthorize("h('USER')")
     public String getPost(){ //for test purposes
         return "test";
     }
-
+//    @PreAuthorize("#username == authentication.principal.username")
 }

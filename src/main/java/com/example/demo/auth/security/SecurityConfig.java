@@ -49,10 +49,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests()
-                .antMatchers("/register").permitAll()
-                .antMatchers("/post").hasAnyRole("USER")
-                .and()
+//                .authorizeRequests()
+//                .antMatchers("/register").permitAll()
+//                .antMatchers("/post").hasAnyRole("USER")
+//                .and()
                 .addFilter(new JwtSignInFilter(authenticationManager(), secretKey))
                 .addFilterAfter(new JwtTokenVerifier(secretKey),JwtSignInFilter.class);
 
