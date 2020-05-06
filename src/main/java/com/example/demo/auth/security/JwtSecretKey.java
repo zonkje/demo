@@ -12,7 +12,8 @@ public class JwtSecretKey {
 
     @Bean
     public SecretKey secretKey() {
-        return Keys.hmacShaKeyFor("usb72hais78123jas89123h8safd67".getBytes());
+
+        return Keys.hmacShaKeyFor("gtrvnjyr123wqsvfsdrfvynj41hgrdp123loikiloiuyhytvrsgy".getBytes());
     }
 
 }

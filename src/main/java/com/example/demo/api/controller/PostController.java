@@ -14,8 +14,16 @@ public class PostController {
 
     // for test purposes
     @GetMapping
+<<<<<<< HEAD
     @PreAuthorize("hasAnyRole('USER')")
     public String getPost(){
         return "test";
     }
+=======
+    @PreAuthorize("h('USER')")
+    public String getPost(){ //for test purposes
+        return "test";
+    }
+//    @PreAuthorize("#username == authentication.principal.username")
+>>>>>>> addMapper
 }

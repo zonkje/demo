@@ -51,6 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
 //                .authorizeRequests()
 //                .antMatchers("/register").permitAll()
+//                .antMatchers("/post").hasAnyRole("USER")
 //                .and()
                 .addFilter(new JwtSignInFilter(authenticationManager(), secretKey))
                 .addFilterAfter(new JwtTokenVerifier(secretKey),JwtSignInFilter.class);
