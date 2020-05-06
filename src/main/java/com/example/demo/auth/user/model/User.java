@@ -13,6 +13,8 @@ import java.util.Collection;
 @Table(name = "users")
 @Data
 @NoArgsConstructor(force = true)
+@Builder
+@AllArgsConstructor
 public class User implements UserDetails {
 
     @Id

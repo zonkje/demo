@@ -1,6 +1,7 @@
 package com.example.demo.auth.controller;
 
 import com.example.demo.auth.user.UserDto;
+import com.example.demo.auth.user.UserMapper;
 import com.example.demo.auth.user.UserRepository;
 import com.example.demo.auth.user.model.User;
 import com.example.demo.auth.user.model.UserRole;
@@ -18,11 +19,13 @@ public class RegisterController {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
 
     @Autowired
-    public RegisterController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public RegisterController(UserRepository userRepository, PasswordEncoder passwordEncoder, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userMapper = userMapper;
     }
     /*
     {
@@ -37,7 +40,7 @@ public class RegisterController {
     @ResponseStatus(HttpStatus.CREATED)
     public void signUp(@RequestBody @Valid UserDto userDto) {
 
-        User newUser = new User();
+        /*User newUser = new User();
         newUser.setUsername(userDto.getUsername());
         newUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
         newUser.setFirstName(userDto.getFirstName());
@@ -48,10 +51,12 @@ public class RegisterController {
         newUser.setAccountNonExpired(true);
         newUser.setAccountNonLocked(true);
         newUser.setCredentialsNonExpired(true);
-        newUser.setEnabled(true);
+        newUser.setEnabled(true);*/
+
+        userRepository.save(userMapper.toUser(userDto));
 
         //var userEntity = mapper.map(userDto);
-        userRepository.save(newUser);
+//        userRepository.save(newUser);
     }
 
 }
