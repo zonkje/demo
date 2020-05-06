@@ -19,8 +19,8 @@ import javax.validation.Valid;
 @CrossOrigin(origins = "*")
 public class RegisterController {
 
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public RegisterController(UserRepository userRepository, PasswordEncoder passwordEncoder) {

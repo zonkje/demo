@@ -15,7 +15,7 @@ public class PostController {
     // for test purposes
     @GetMapping
     @PreAuthorize("hasAnyRole('USER')")
-    public String getPost(){ //for test purposes
+    public String getPost(){
         return "test";
     }
 }
