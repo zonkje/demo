@@ -14,9 +14,9 @@ public class PostController {
 
     // for test purposes
     @GetMapping
-    @PreAuthorize("h('USER')")
-    public String getPost(){ //for test purposes
+    @PreAuthorize("hasAnyRole('USER')")
+    public String getPost(){
         return "test";
     }
-//    @PreAuthorize("#username == authentication.principal.username")
+
 }
