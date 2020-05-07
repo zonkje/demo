@@ -1,12 +1,11 @@
 package com.example.demo.auth.user;
 
+import com.example.demo.auth.registration.UserSignUp;
 import com.example.demo.auth.security.passwordencode.EncodedMapping;
 import com.example.demo.auth.security.passwordencode.PasswordEncoderMapper;
 import com.example.demo.auth.user.model.User;
-import org.apache.catalina.security.SecurityUtil;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Mapper(componentModel = "spring",
         uses = PasswordEncoderMapper.class
@@ -26,7 +25,7 @@ public interface UserMapper {
     @Mapping(target = "isAccountNonExpired", constant = "true")
     @Mapping(target = "role", expression = "java( com.example.demo.auth.user.model.UserRole.USER)")
     @Mapping(target = "password", qualifiedBy = EncodedMapping.class)
-    User toUser(UserDto userDto);
+    User toUser(UserSignUp newUser);
 
     UserDto toUserDto(User user);
 
