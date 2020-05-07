@@ -1,15 +1,17 @@
 package com.example.demo.auth.user;
 
+import com.example.demo.auth.security.passwordencode.EncodedMapping;
+import com.example.demo.auth.security.passwordencode.PasswordEncoderMapper;
 import com.example.demo.auth.user.model.User;
+import org.apache.catalina.security.SecurityUtil;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Mapper(componentModel = "spring",
-        uses = PasswordEncoder.class
+        uses = PasswordEncoderMapper.class
         )
 public interface UserMapper {
-
     /*
             there's some strange behaviour: hint for this method says:
             Unmapped target properties: accountNonExpired, accountNonLocked, credentialsNonExpired, enabled
@@ -22,8 +24,8 @@ public interface UserMapper {
     @Mapping(target = "isCredentialsNonExpired", constant = "true")
     @Mapping(target = "isAccountNonLocked", constant = "true")
     @Mapping(target = "isAccountNonExpired", constant = "true")
-    @Mapping(expression = "java( com.example.demo.auth.user.model.UserRole.USER)", target = "role")
-//    @Mapping(expression = "java(passwordEncoder.encode(\"userDto.password\"))", target = "password") //this works but encoding also other fields like username, email etc
+    @Mapping(target = "role", expression = "java( com.example.demo.auth.user.model.UserRole.USER)")
+    @Mapping(target = "password", qualifiedBy = EncodedMapping.class)
     User toUser(UserDto userDto);
 
     UserDto toUserDto(User user);

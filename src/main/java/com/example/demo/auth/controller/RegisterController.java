@@ -7,10 +7,12 @@ import com.example.demo.auth.user.model.User;
 import com.example.demo.auth.user.model.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/register")
@@ -40,23 +42,16 @@ public class RegisterController {
     @ResponseStatus(HttpStatus.CREATED)
     public void signUp(@RequestBody @Valid UserDto userDto) {
 
-        /*User newUser = new User();
-        newUser.setUsername(userDto.getUsername());
-        newUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        newUser.setFirstName(userDto.getFirstName());
-        newUser.setSecondName(userDto.getSecondName());
-        newUser.setEmail(userDto.getEmail());
-
-        newUser.setRole(UserRole.USER);
-        newUser.setAccountNonExpired(true);
-        newUser.setAccountNonLocked(true);
-        newUser.setCredentialsNonExpired(true);
-        newUser.setEnabled(true);*/
-
         userRepository.save(userMapper.toUser(userDto));
 
-        //var userEntity = mapper.map(userDto);
-//        userRepository.save(newUser);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto> findUser(@PathVariable("id") Long id){
+        Optional<User> optionalUserDto = userRepository.findById(id);
+        return optionalUserDto
+                .map(user -> new ResponseEntity<>(userMapper.toUserDto(user), HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
 }
