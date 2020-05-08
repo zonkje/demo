@@ -37,7 +37,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         String authHeader = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        if(!Strings.isNotBlank(authHeader) || !"Bearer ".startsWith(authHeader)) {
+        if(Strings.isBlank(authHeader) || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
@@ -53,6 +53,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
             Claims body = claimsJws.getBody();
             String username = body.getSubject();
 
+            // this cast is unsafe, check befaore casting if body is od type List or suppress for this warning
             var authorities = (List<Map<String, String>>) body.get("authorities");
 
             Set<SimpleGrantedAuthority> simpleGrantedAuthorities = authorities.stream()
