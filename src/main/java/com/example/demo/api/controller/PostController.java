@@ -20,12 +20,6 @@ public class PostController {
         this.postService = postService;
     }
 
-    // for test purposes
-    @GetMapping
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public String getPost() {
-        return "test";
-    }
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_USER')")
