@@ -4,6 +4,7 @@ import com.example.demo.auth.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -22,7 +23,7 @@ public class UserController {
         this.userMapper = userMapper;
     }
 
-
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> findUser(@PathVariable("id") Long id) {
         Optional<User> optionalUserDto = userRepository.findById(id);
@@ -31,6 +32,7 @@ public class UserController {
                 .orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PatchMapping("/edit/{id}")
     public UserDto updateUser(@PathVariable("id") Long id,
                               @RequestBody UserDto userToUpdate) {

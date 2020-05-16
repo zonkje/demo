@@ -1,22 +1,37 @@
 package com.example.demo.api.controller;
 
+import com.example.demo.api.dto.PostDto;
 import com.example.demo.api.model.Post;
+import com.example.demo.api.service.PostService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/post")
 @CrossOrigin(origins = "*")
 public class PostController {
 
+    private final PostService postService;
+
+    @Autowired
+    public PostController(PostService postService) {
+        this.postService = postService;
+    }
+
     // for test purposes
     @GetMapping
-    @PreAuthorize("hasAnyRole('ROLE_USER')")
-    public String getPost(){
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public String getPost() {
         return "test";
+    }
+
+    @PostMapping
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public PostDto createPost(@RequestBody PostDto postDto,
+                              Authentication authentication) {
+        return postService.createPost(postDto, authentication.getName());
     }
 
 }

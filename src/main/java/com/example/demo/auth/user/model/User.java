@@ -1,5 +1,6 @@
 package com.example.demo.auth.user.model;
 
+import com.example.demo.api.model.Post;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -7,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 
 
 @Entity
@@ -19,10 +21,10 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", unique = true)
     private final Long id;
 
-    @Column(name = "username")
+    @Column(name = "username", unique = true)
     private String username;
 
     @Column(name = "password")
@@ -36,6 +38,9 @@ public class User implements UserDetails {
 
     @Column(name = "email")
     private String email;
+
+    @OneToMany(mappedBy = "postAuthor")
+    private Collection<Post> posts;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")

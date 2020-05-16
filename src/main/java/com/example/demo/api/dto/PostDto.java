@@ -1,29 +1,31 @@
-package com.example.demo.auth.user;
+package com.example.demo.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-
-
+import java.time.ZonedDateTime;
 
 @Data
-@NoArgsConstructor(force = true)
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class PostDto {
 
     private Long id;
 
     @NotBlank
-    private String firstName;
+    private String title;
+
     @NotBlank
-    private String secondName;
-    @Email
+    private String content;
+
     @NotBlank
-    private String email;
+    private ZonedDateTime creationDateTime;
+
+    @NotBlank
+    private String authorName;
 
 }
