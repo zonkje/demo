@@ -6,8 +6,14 @@ import com.example.demo.api.model.Post;
 import com.example.demo.api.repository.PostRepository;
 import com.example.demo.auth.user.UserRepository;
 import com.example.demo.auth.user.model.User;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -31,4 +37,13 @@ public class PostService {
         post.setPostAuthor(author);
         return postMapper.toPostDto(postRepository.save(post), authorName);
     }
+
+    public Collection<PostDto> getPosts() {
+        return Lists.newArrayList(postRepository.findAll())
+                .stream()
+                .map( post -> postMapper.toPostDto(post, post.getPostAuthor().getFirstName()))
+                .collect(Collectors.toList());
+    }
+
+
 }

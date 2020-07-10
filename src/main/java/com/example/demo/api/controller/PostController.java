@@ -8,6 +8,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+
 @RestController
 @RequestMapping(path = "/post")
 @CrossOrigin(origins = "*")
@@ -26,6 +28,12 @@ public class PostController {
     public PostDto createPost(@RequestBody PostDto postDto,
                               Authentication authentication) {
         return postService.createPost(postDto, authentication.getName());
+    }
+
+    @GetMapping
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public Collection<PostDto> getAllPosts(){
+        return postService.getPosts();
     }
 
 }

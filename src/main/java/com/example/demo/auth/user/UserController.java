@@ -8,6 +8,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -34,7 +36,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @PatchMapping("/edit/")
+    @PatchMapping("/edit")
     public UserDto updateUser(Authentication authentication,
                               @RequestBody UserDto userToUpdate) {
         User user = userRepository.findByUsername(authentication.getName()).get();
