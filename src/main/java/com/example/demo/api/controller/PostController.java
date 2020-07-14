@@ -2,6 +2,7 @@ package com.example.demo.api.controller;
 
 import com.example.demo.api.dto.PostDto;
 import com.example.demo.api.model.Post;
+import com.example.demo.api.repository.PostRepository;
 import com.example.demo.api.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,14 +17,16 @@ import java.util.Collection;
 public class PostController {
 
     private final PostService postService;
+    private final PostRepository postRepository;
 
     @Autowired
-    public PostController(PostService postService) {
+    public PostController(PostService postService, PostRepository postRepository) {
         this.postService = postService;
+        this.postRepository = postRepository;
     }
 
 
-    @PostMapping
+    @PostMapping(consumes = "application/json")
     @PreAuthorize("hasRole('ROLE_USER')")
     public PostDto createPost(@RequestBody PostDto postDto,
                               Authentication authentication) {
@@ -33,7 +36,20 @@ public class PostController {
     @GetMapping
     @PreAuthorize("hasRole('ROLE_USER')")
     public Collection<PostDto> getAllPosts(){
+//        return postRepository.findAll();
         return postService.getPosts();
+    }
+
+    @GetMapping("/{postId}")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public PostDto getPost(@PathVariable("postId") Long postId){
+        return postService.getPost(postId);
+    }
+
+    @DeleteMapping("/{postId}")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public PostDto deletePost(@PathVariable("postId") Long postId){
+        return postService.deletePost(postId);
     }
 
 }

@@ -29,7 +29,6 @@ public class PostService {
         this.userRepository = userRepository;
     }
 
-
     public PostDto createPost(PostDto postDto, String authorName) {
         // this works fine, but I think this logic (setting author to new post) should be contained in mapper
         Post post = postMapper.toPost(postDto);
@@ -39,11 +38,21 @@ public class PostService {
     }
 
     public Collection<PostDto> getPosts() {
-        return Lists.newArrayList(postRepository.findAll())
-                .stream()
-                .map( post -> postMapper.toPostDto(post, post.getPostAuthor().getFirstName()))
-                .collect(Collectors.toList());
+//        Change it later using streams()
+        Iterable<Post> posts = postRepository.findAll();
+        Collection<PostDto> postDtos = new ArrayList<>();
+        for(Post post : posts) {
+//            We need somehow get author name and pass it to method below
+            PostDto postDto = postMapper.toPostDto(post, "TestHardcodedAuthorName");
+            postDtos.add(postDto);
+        }
+        return postDtos;
     }
 
+    public PostDto getPost(Long postId) {
+        Post post = postRepository.findById(postId).get();
+        String author = post.getPostAuthor().getFirstName();
+        return postMapper.toPostDto(post, author);
+    }
 
 }
