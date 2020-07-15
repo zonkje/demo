@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,21 +39,27 @@ public class PostService {
     }
 
     public Collection<PostDto> getPosts() {
-//        Change it later using streams()
-        Iterable<Post> posts = postRepository.findAll();
-        Collection<PostDto> postDtos = new ArrayList<>();
-        for(Post post : posts) {
-//            We need somehow get author name and pass it to method below
-            PostDto postDto = postMapper.toPostDto(post, "TestHardcodedAuthorName");
-            postDtos.add(postDto);
-        }
-        return postDtos;
+        return Lists.newArrayList(postRepository.findAll())
+                .stream()
+                .map( post -> {
+                    /*
+                    Somehow this line causes NullPointer
+                    String authorName = post.getPostAuthor().getFirstName();
+                    That's strange, exactly the same line in method 'getPost' works just fine
+                    */
+                    return postMapper.toPostDto(post, "tempAuthorName");
+                })
+                .collect(Collectors.toList());
     }
 
     public PostDto getPost(Long postId) {
         Post post = postRepository.findById(postId).get();
         String author = post.getPostAuthor().getFirstName();
         return postMapper.toPostDto(post, author);
+    }
+
+    public void deletePost(Long postId) {
+        postRepository.deleteById(postId);
     }
 
 }

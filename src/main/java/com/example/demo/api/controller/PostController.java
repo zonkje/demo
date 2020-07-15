@@ -48,8 +48,8 @@ public class PostController {
 
     @DeleteMapping("/{postId}")
     @PreAuthorize("hasRole('ROLE_USER')")
-    public PostDto deletePost(@PathVariable("postId") Long postId){
-        return postService.deletePost(postId);
+    public void deletePost(@PathVariable("postId") Long postId){
+        postService.deletePost(postId);
     }
 
 }
