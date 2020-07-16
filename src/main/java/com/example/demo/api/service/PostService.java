@@ -62,4 +62,15 @@ public class PostService {
         postRepository.deleteById(postId);
     }
 
+    public PostDto updatePost(Long postId, PostDto postDto) {
+        Post updatedPost = postRepository.findById(postId).get();
+        if(postDto.getContent()!=null){
+            updatedPost.setContent(postDto.getContent());
+        }
+        if(postDto.getTitle()!=null){
+            updatedPost.setTitle(postDto.getTitle());
+        }
+        return postMapper.toPostDto(postRepository.save(updatedPost), updatedPost.getPostAuthor().getFirstName());
+    }
+
 }

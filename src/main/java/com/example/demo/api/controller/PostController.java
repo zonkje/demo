@@ -52,4 +52,10 @@ public class PostController {
         postService.deletePost(postId);
     }
 
+    @PatchMapping("/{postId}")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public PostDto updatePost(@PathVariable("postId") Long postId, @RequestBody PostDto postDto) {
+        return postService.updatePost(postId, postDto);
+    }
+
 }
