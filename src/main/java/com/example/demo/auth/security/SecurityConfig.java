@@ -4,7 +4,7 @@ package com.example.demo.auth.security;
 import com.example.demo.auth.jwt.JwtSignInFilter;
 import com.example.demo.auth.jwt.JwtTokenVerifier;
 import com.example.demo.auth.user.UserRepositoryService;
-import io.jsonwebtoken.security.Keys;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,8 +16,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.crypto.SecretKey;
+
 
 @Configuration
 @EnableWebSecurity
@@ -44,17 +48,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .cors()
+                .and()
                 .csrf()
-                    .disable()
+                .disable()
                 .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
 //                .authorizeRequests()
 //                .antMatchers("/register").permitAll()
 //                .antMatchers("/post").hasAnyRole("USER")
 //                .and()
                 .addFilter(new JwtSignInFilter(authenticationManager(), secretKey))
-                .addFilterAfter(new JwtTokenVerifier(secretKey),JwtSignInFilter.class);
+                .addFilterAfter(new JwtTokenVerifier(secretKey), JwtSignInFilter.class);
 
     }
 
@@ -64,6 +70,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         provider.setPasswordEncoder(passwordEncoder);
         provider.setUserDetailsService(userRepositoryService);
         return provider;
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        return source;
     }
 
 }
