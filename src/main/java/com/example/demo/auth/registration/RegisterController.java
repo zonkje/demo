@@ -26,7 +26,7 @@ public class RegisterController {
 	  "username": "szyemkmeow",
 	  "password": "passwordpassword",
 	  "firstName": "Szymek",
-	  "secondName": "Er",
+	  "lastName": "Er",
 	  "email": "test@gmail.com"
     }
     */

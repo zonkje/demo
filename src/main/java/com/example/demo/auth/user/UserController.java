@@ -8,8 +8,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -43,8 +41,8 @@ public class UserController {
         if (userToUpdate.getFirstName() != null) {
             user.setFirstName(userToUpdate.getFirstName());
         }
-        if (userToUpdate.getSecondName() != null) {
-            user.setSecondName(userToUpdate.getSecondName());
+        if (userToUpdate.getLastName() != null) {
+            user.setLastName(userToUpdate.getLastName());
         }
         if (userToUpdate.getEmail() != null) {
             user.setEmail(userToUpdate.getEmail());

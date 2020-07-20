@@ -23,7 +23,7 @@ public class UserSignUp {
     @NotBlank
     private String firstName;
     @NotBlank
-    private String secondName;
+    private String lastName;
     @Email
     @NotBlank
     private String email;
