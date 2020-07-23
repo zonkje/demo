@@ -1,6 +1,9 @@
 package com.example.demo.auth.jwt;
 
 import com.example.demo.auth.security.JwtSecretKey;
+import com.example.demo.auth.user.UserRepository;
+import com.example.demo.auth.user.UserRepositoryService;
+import com.example.demo.auth.user.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.net.HttpHeaders;
 import io.jsonwebtoken.Jwts;
@@ -18,15 +21,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Optional;
 
 public class JwtSignInFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final SecretKey secretKey;
+    private final UserRepository userRepository;
 
-    public JwtSignInFilter(AuthenticationManager authenticationManager, SecretKey secretKey) {
+    public JwtSignInFilter(AuthenticationManager authenticationManager, SecretKey secretKey, UserRepository userRepository) {
         this.authenticationManager = authenticationManager;
         this.secretKey = secretKey;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -60,6 +66,12 @@ public class JwtSignInFilter extends UsernamePasswordAuthenticationFilter {
                 .signWith(secretKey)
                 .compact();
 
+        Optional<User> userOptional = userRepository.findByUsername(authResult.getName());
+        Long signingUserId = userOptional.get().getId();
+
+        response.addHeader("Access-Control-Expose-Headers", "UserID");
+        response.addHeader("UserID", signingUserId+"");
+        response.addHeader("Access-Control-Expose-Headers", HttpHeaders.AUTHORIZATION);
         response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer "+token);
     }
 }

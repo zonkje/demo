@@ -3,6 +3,7 @@ package com.example.demo.auth.security;
 
 import com.example.demo.auth.jwt.JwtSignInFilter;
 import com.example.demo.auth.jwt.JwtTokenVerifier;
+import com.example.demo.auth.user.UserRepository;
 import com.example.demo.auth.user.UserRepositoryService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.crypto.SecretKey;
+import java.util.Arrays;
 
 
 @Configuration
@@ -31,12 +33,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
     private final UserRepositoryService userRepositoryService;
     private final SecretKey secretKey;
+    private final UserRepository userRepository;
+
 
     @Autowired
-    public SecurityConfig(PasswordEncoder passwordEncoder, UserRepositoryService userRepositoryService, SecretKey secretKey) {
+    public SecurityConfig(PasswordEncoder passwordEncoder, UserRepositoryService userRepositoryService, SecretKey secretKey, UserRepository userRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepositoryService = userRepositoryService;
         this.secretKey = secretKey;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -59,7 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/register").permitAll()
 //                .antMatchers("/post").hasAnyRole("USER")
 //                .and()
-                .addFilter(new JwtSignInFilter(authenticationManager(), secretKey))
+                .addFilter(new JwtSignInFilter(authenticationManager(), secretKey, userRepository))
                 .addFilterAfter(new JwtTokenVerifier(secretKey), JwtSignInFilter.class);
 
     }
@@ -73,9 +78,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
+        configuration.setExposedHeaders(Arrays.asList("x-auth-token"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 

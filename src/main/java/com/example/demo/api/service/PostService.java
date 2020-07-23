@@ -58,10 +58,6 @@ public class PostService {
         return postMapper.toPostDto(post, author);
     }
 
-    public void deletePost(Long postId) {
-        postRepository.deleteById(postId);
-    }
-
     public PostDto updatePost(Long postId, PostDto postDto) {
         Post updatedPost = postRepository.findById(postId).get();
         if(postDto.getContent()!=null){
@@ -71,6 +67,10 @@ public class PostService {
             updatedPost.setTitle(postDto.getTitle());
         }
         return postMapper.toPostDto(postRepository.save(updatedPost), updatedPost.getPostAuthor().getFirstName());
+    }
+
+    public void deletePost(Long postId) {
+        postRepository.deleteById(postId);
     }
 
 }
