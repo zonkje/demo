@@ -28,6 +28,7 @@ public class JwtSignInFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final SecretKey secretKey;
     private final UserRepository userRepository;
+    private static final Integer TOKEN_EXPIRATION_TIME_DAYS = 20;
 
     public JwtSignInFilter(AuthenticationManager authenticationManager, SecretKey secretKey, UserRepository userRepository) {
         this.authenticationManager = authenticationManager;
@@ -62,13 +63,15 @@ public class JwtSignInFilter extends UsernamePasswordAuthenticationFilter {
                 .setSubject(authResult.getName())
                 .claim("authorities", authResult.getAuthorities())
                 .setIssuedAt(new Date())
-                .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(20)))
+                .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(JwtSignInFilter.TOKEN_EXPIRATION_TIME_DAYS)))
                 .signWith(secretKey)
                 .compact();
 
         Optional<User> userOptional = userRepository.findByUsername(authResult.getName());
         Long signingUserId = userOptional.get().getId();
 
+        response.addHeader("Access-Control-Expose-Headers", "Token-Exp-Days");
+        response.addHeader("Token-Exp-Days", JwtSignInFilter.TOKEN_EXPIRATION_TIME_DAYS+"");
         response.addHeader("Access-Control-Expose-Headers", "UserID");
         response.addHeader("UserID", signingUserId+"");
         response.addHeader("Access-Control-Expose-Headers", HttpHeaders.AUTHORIZATION);

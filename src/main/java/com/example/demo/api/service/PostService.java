@@ -42,12 +42,8 @@ public class PostService {
         return Lists.newArrayList(postRepository.findAll())
                 .stream()
                 .map( post -> {
-                    /*
-                    Somehow this line causes NullPointer
                     String authorName = post.getPostAuthor().getFirstName();
-                    That's strange, exactly the same line in method 'getPost' works just fine
-                    */
-                    return postMapper.toPostDto(post, "tempAuthorName");
+                    return postMapper.toPostDto(post, authorName);
                 })
                 .collect(Collectors.toList());
     }

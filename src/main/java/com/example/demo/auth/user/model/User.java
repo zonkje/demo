@@ -39,6 +39,7 @@ public class User implements UserDetails {
     @Column(name = "email")
     private String email;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "postAuthor")
     private Collection<Post> posts;
 
