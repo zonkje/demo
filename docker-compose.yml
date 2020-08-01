@@ -6,9 +6,11 @@ services:
     environment:
       MYSQL_DATABASE: testsdb
       MYSQL_USER: szymek
+      MYSQL_ROOT_PASSWORD: '!hoax?123a'
       MYSQL_PASSWORD: '!hoax?123a'
     ports:
     - "3306:3306"
+    restart: always
   api:
     build: .
     ports:
