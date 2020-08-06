@@ -36,7 +36,6 @@ public class PostController {
     @GetMapping
     @PreAuthorize("hasRole('ROLE_USER')")
     public Collection<PostDto> getAllPosts(){
-//        return postRepository.findAll();
         return postService.getPosts();
     }
 
