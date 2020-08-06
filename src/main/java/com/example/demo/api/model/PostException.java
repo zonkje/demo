@@ -14,6 +14,7 @@ public class PostException {
 
     private final String message;
     private final HttpStatus httpStatus;
+    private final int httpStatusCode;
     private final ZonedDateTime timestamp;
 
 }

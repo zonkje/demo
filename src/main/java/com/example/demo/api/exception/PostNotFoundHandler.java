@@ -5,11 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class PostNotFoundHandler {
 
     @ExceptionHandler(PostNotFoundException.class)
@@ -19,6 +20,7 @@ public class PostNotFoundHandler {
         PostException postException = new PostException(
                 exception.getMessage(),
                 httpStatus,
+                httpStatus.value(),
                 ZonedDateTime.now(ZoneId.systemDefault())
         );
         return new ResponseEntity<>(postException, httpStatus);
