@@ -1,8 +1,6 @@
 package com.example.demo.api.controller;
 
 import com.example.demo.api.dto.PostDto;
-import com.example.demo.api.model.Post;
-import com.example.demo.api.repository.PostRepository;
 import com.example.demo.api.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,12 +15,10 @@ import java.util.Collection;
 public class PostController {
 
     private final PostService postService;
-    private final PostRepository postRepository;
 
     @Autowired
-    public PostController(PostService postService, PostRepository postRepository) {
+    public PostController(PostService postService) {
         this.postService = postService;
-        this.postRepository = postRepository;
     }
 
 

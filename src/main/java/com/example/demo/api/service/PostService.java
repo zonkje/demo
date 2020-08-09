@@ -41,7 +41,7 @@ public class PostService {
     }
 
     public Collection<PostDto> getPosts() {
-        return Lists.newArrayList(postRepository.findAll())
+        return postRepository.findAll()
                 .stream()
                 .map(post -> {
                     String authorName = post.getPostAuthor().getFirstName();
