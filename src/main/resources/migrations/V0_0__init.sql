@@ -3,6 +3,18 @@
     Description: DB Structure and data init.
 */
 
+/*
+
+    Should I create database first???
+
+    CREATE SCHEMA `testdb` ;
+
+    If I uncomment it and don't create schema manually I'll get sql exception ~Unknown database 'testdb'
+    If I uncomment it, but create schema manually earlier, migration will fail ~Can't create database 'testdb'; database exists
+    How does Flyway works? It doesn't seems helpful if database need to exists before the app run.
+*/
+
+
 
 /*
     Structure
