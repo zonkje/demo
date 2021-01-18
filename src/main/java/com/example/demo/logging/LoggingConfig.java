@@ -29,12 +29,12 @@ registry.addInterceptor(new HandlerInterceptor() {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        System.out.println("POST HANDLE **********************");
+        loggerService.response(response, request);
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        System.out.println("AFTER COMPLETION ******************");
+
     }
 });
     }

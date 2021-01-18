@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.stream.Collectors;
@@ -28,15 +29,14 @@ public class LoggerService {
         LOG.info(requestLogMessage.toString());
     }
 
-    public void response() {
+    public void response(HttpServletResponse response, HttpServletRequest request) {
         StringBuilder responseLogMessage = new StringBuilder();
 
-        responseLogMessage.append("*** RESPONSE ************************************************/n")
-                .append("* REQUEST URI")
-                .append("* STATUS")
-                .append("* HEADERS")
-                .append("* BODY")
-                .append("\n************************************************************");
+        responseLogMessage.append("\n*** RESPONSE ************************************************************************\n")
+                .append("* REQUEST URI : ").append(request.getRequestURI()).append("\n")
+                .append("* STATUS CODE : ").append(response.getStatus()).append("\n")
+                .append("* HEADERS     : ").append(getHeaders(response)).append("\n")
+                .append("************************************************************************************\n");
 
         LOG.info(responseLogMessage.toString());
     }
@@ -51,12 +51,14 @@ public class LoggerService {
         );
         return headers.toString();
     }
-//private String getHeaders(HttpServletRequest request) {
-//    final var headers = new HashMap<String, String>();
-//    request.getHeaderNames().asIterator()
-//            .forEachRemaining(headerName -> headers.put(headerName, request.getHeader(headerName)));
-//    return headers.keySet().stream().map(key -> key + "=" + headers.get(key))
-//            .collect(Collectors.joining("\n", "{\n", "\n}"));
-//}
+    private String getHeaders(HttpServletResponse response) {
+        StringBuilder headers = new StringBuilder();
+        response.getHeaderNames().forEach(headerName -> headers.append("\n")
+                .append("\t- ")
+                .append(headerName.toUpperCase())
+                .append(" : ")
+                .append(response.getHeader(headerName)));
+        return headers.toString();
+    }
 
 }
