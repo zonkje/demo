@@ -1,13 +1,16 @@
 package com.example.demo.logging;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.http.HttpMethod;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.context.request.WebRequestInterceptor;
+
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.handler.DispatcherServletWebRequest;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.Objects;
 
 @Configuration
 public class LoggingConfig implements WebMvcConfigurer {
@@ -20,22 +23,27 @@ public class LoggingConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-registry.addInterceptor(new HandlerInterceptor() {
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        loggerService.request(request);
-        return true;
-    }
+        registry.addWebRequestInterceptor(new WebRequestInterceptor() {
 
-    @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        loggerService.response(response, request);
-    }
+            @Override
+            public void preHandle(WebRequest request) throws Exception {
+                if (request instanceof DispatcherServletWebRequest && (
+                        Objects.equals(((DispatcherServletWebRequest) request).getHttpMethod(), HttpMethod.GET)
+                                || Objects
+                                .equals(((DispatcherServletWebRequest) request).getHttpMethod(), HttpMethod.DELETE))) {
+                    loggerService.request(((DispatcherServletWebRequest) request).getRequest(), null);
+                }
+            }
 
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+            @Override
+            public void postHandle(WebRequest request, ModelMap model) throws Exception {
 
-    }
-});
+            }
+
+            @Override
+            public void afterCompletion(WebRequest request, Exception ex) throws Exception {
+
+            }
+        });
     }
 }
