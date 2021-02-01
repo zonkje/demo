@@ -8,23 +8,19 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
-import java.util.Collection;
 
 @Entity
-@Table(name = "posts")
 @Data
+@Table(name = "comments")
 @NoArgsConstructor(force = true)
 @Builder
 @AllArgsConstructor
-public class Post {
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", unique = true)
     private final Long id;
-
-    @Column(name = "title")
-    private String title;
 
     @Column(name = "content")
     private String content;
@@ -33,10 +29,7 @@ public class Post {
     private ZonedDateTime creationDateTime;
 
     @ManyToOne
-    @JoinColumn(name = "post_author_id")
-    private User postAuthor;
-
-    @OneToMany(mappedBy = "postAuthor")
-    private Collection<Comment> comments;
+    @JoinColumn(name = "post_id")
+    private Post associatedPost;
 
 }
