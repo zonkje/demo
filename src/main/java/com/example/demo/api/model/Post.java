@@ -36,7 +36,7 @@ public class Post {
     @JoinColumn(name = "post_author_id")
     private User postAuthor;
 
-    @OneToMany(mappedBy = "postAuthor")
+    @OneToMany(mappedBy = "associatedPost")
     private Collection<Comment> comments;
 
 }
