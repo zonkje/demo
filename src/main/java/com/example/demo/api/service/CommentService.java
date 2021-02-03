@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CommentService {
@@ -27,9 +28,12 @@ public class CommentService {
         this.commentMapper = commentMapper;
     }
 
-    public Collection<Comment> getComments(Long postId){
-        Collection<Comment> comments = commentRepository.findAllByAssociatedPost(postId);
-        return comments;
+    public Collection<CommentDto> getComments(Long postId){
+        return commentRepository.findAll()
+                .stream()
+                .filter(comment -> comment.getAssociatedPost().getId()==postId)
+                .map(comment -> commentMapper.toCommentDto(comment, postId))
+                .collect(Collectors.toList());
     }
 
     public CommentDto addComment(CommentDto commentDto){
